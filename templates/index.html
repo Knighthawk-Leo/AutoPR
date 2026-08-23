@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <main class="calculator">
+        <h1>Simple Calculator</h1>
+        <form method="post" action="/">
+            <label>
+                First number
+                <input type="number" step="any" name="a" value="{{ a }}" required />
+            </label>
+
+            <label>
+                Operation
+                <select name="op">
+                    <option value="add" {% if op == "add" %}selected{% endif %}>Add (+)</option>
+                    <option value="sub" {% if op == "sub" %}selected{% endif %}>Subtract (-)</option>
+                    <option value="mul" {% if op == "mul" %}selected{% endif %}>Multiply (×)</option>
+                    <option value="div" {% if op == "div" %}selected{% endif %}>Divide (÷)</option>
+                </select>
+            </label>
+
+            <label>
+                Second number
+                <input type="number" step="any" name="b" value="{{ b }}" required />
+            </label>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if result is not none %}
+            <div class="result">Result: <strong>{{ result }}</strong></div>
+        {% endif %}
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+    </main>
+</body>
+</html>

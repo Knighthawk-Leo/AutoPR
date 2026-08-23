@@ -3,15 +3,57 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0a0607" />
     <title>Simple Calculator</title>
+    <script>
+        /* Resolve the theme before the first paint so the page never flashes
+           the wrong canvas. Kept inline and blocking on purpose — an external
+           file would arrive too late. The rest of the toggle lives in
+           /static/theme.js. */
+        (function () {
+            var theme = "dark";
+            try {
+                var stored = localStorage.getItem("calculator-theme");
+                if (stored === "light" || stored === "dark") {
+                    theme = stored;
+                } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+                    theme = "light";
+                }
+            } catch (err) {
+                /* Storage blocked — keep the dark default. */
+            }
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
     <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
     <main class="calculator">
+        <!-- Revealed by theme.js: without scripting the button cannot do
+             anything, so it stays hidden and the OS preference wins. -->
+        <button
+            type="button"
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-pressed="true"
+            aria-label="Switch to light mode"
+            title="Switch to light mode"
+            hidden
+        >
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.2" />
+                <path d="M12 2v2.2M12 19.8V22M4.22 4.22l1.56 1.56M18.22 18.22l1.56 1.56M2 12h2.2M19.8 12H22M4.22 19.78l1.56-1.56M18.22 5.78l1.56-1.56" />
+            </svg>
+        </button>
+
         <h1>Simple Calculator</h1>
-        <p class="subtitle">Dark Red &amp; Black</p>
+        <p class="subtitle">Crimson &amp; Ash</p>
 
         <form method="post" action="/">
             <label>
@@ -43,6 +85,10 @@
         {% if error %}
             <div class="error" role="alert">{{ error }}</div>
         {% endif %}
+
+        <span id="theme-status" class="sr-only" role="status" aria-live="polite"></span>
     </main>
+
+    <script src="/static/theme.js" defer></script>
 </body>
 </html>

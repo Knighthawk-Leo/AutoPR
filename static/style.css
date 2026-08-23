@@ -1,16 +1,23 @@
 /* ==========================================================================
-   Simple Calculator — "Dark Red & Black" theme
-   A warm black canvas cut by one hue. Crimson is the loud colour: it carries
-   the brand, the primary action and every failure. Ash is the quiet colour:
-   cold near-white for structure, focus and success. Every step of the
-   workflow — input -> operation -> submit -> result / error — is crimson or
-   ash on black.
+   Simple Calculator — "Crimson & Ash" theme
+   One hue, two canvases. Crimson is the loud colour: it carries the brand,
+   the primary action and every failure. Ash is the quiet colour: cold neutral
+   for structure, focus and success. The whole UI is driven by the semantic
+   tokens below, so flipping `data-theme` on <html> shifts every surface,
+   border, ring and gradient at once.
+
+   Theme resolution:
+     :root                        -> dark (default, also the no-JS fallback)
+     :root[data-theme="light"]    -> light (explicit user choice)
+     prefers-color-scheme: light  -> light, only while no choice is stored
    ========================================================================== */
+
+/* --- Dark: warm black canvas -------------------------------------------- */
 
 :root {
     color-scheme: dark;
 
-    /* Canvas — warm black, tinted just enough that crimson sits *in* it ---- */
+    /* Canvas — warm black, tinted just enough that crimson sits *in* it */
     --bg-base: #0a0607;
     --bg-deep: #120b0d;
     --surface: #1a1013;
@@ -18,28 +25,123 @@
     --border: #43272c;
     --border-strong: #6b3a41;
 
-    /* Type ---------------------------------------------------------------- */
+    /* Type */
     --text: #f7f2f3;
     --text-muted: #c2adb1;
 
-    /* Crimson ramp — the loud colour: brand, action + failure -------------- */
+    /* Crimson ramp — the loud colour: brand, action + failure */
     --crimson: #ef4152;
     --crimson-strong: #9c1526;
     --crimson-bright: #ff7a86;
     --crimson-wash: #2a0c11;
 
-    /* Ash ramp — the quiet colour: structure, focus + success -------------- */
+    /* Ash ramp — the quiet colour: structure, focus + success */
     --ash: #d5d9e0;
     --ash-strong: #98a0ab;
     --ash-bright: #f2f4f8;
     --ash-wash: #15171b;
 
-    /* Effects -------------------------------------------------------------- */
+    /* Primary action — black type on the crimson bar. White would fall to
+       ~3.4:1 on crimson; black holds 5.3:1 and up. */
+    --btn-from: var(--crimson);
+    --btn-to: var(--crimson-bright);
+    --btn-fg: #0a0607;
+    --btn-border: var(--crimson-strong);
+    --btn-glow: rgba(239, 65, 82, 0.32);
+
+    /* Ambient light behind the card */
+    --glow-a: rgba(156, 21, 38, 0.34);
+    --glow-b: rgba(239, 65, 82, 0.2);
+
+    /* Effects */
     --ring-crimson: 0 0 0 3px rgba(239, 65, 82, 0.45);
     --ring-ash: 0 0 0 3px rgba(213, 217, 224, 0.4);
     --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.78);
     --radius: 12px;
     --speed: 0.18s;
+    --shift: 0.32s;
+}
+
+/* --- Light: warm paper canvas -------------------------------------------
+   Same roles, re-pitched. Crimson darkens so it keeps 4.5:1+ as text on
+   paper, and the primary action flips to white-on-crimson. Ash becomes a
+   cool slate so "quiet" still reads as quiet against a bright ground. */
+
+:root[data-theme="light"] {
+    color-scheme: light;
+
+    --bg-base: #fdf8f8;
+    --bg-deep: #ffffff;
+    --surface: #fffbfb;
+    --surface-raised: #ffffff;
+    --border: #e7d3d6;
+    --border-strong: #c99aa2;
+
+    --text: #1c1315;
+    --text-muted: #6d585c;
+
+    --crimson: #c81e35;
+    --crimson-strong: #8c0f22;
+    --crimson-bright: #ef4152;
+    --crimson-wash: #fdeaec;
+
+    --ash: #4a525e;
+    --ash-strong: #6b7480;
+    --ash-bright: #1e242c;
+    --ash-wash: #f1f3f6;
+
+    --btn-from: #c81e35;
+    --btn-to: #a3162a;
+    --btn-fg: #ffffff;
+    --btn-border: #8c0f22;
+    --btn-glow: rgba(140, 15, 34, 0.28);
+
+    --glow-a: rgba(200, 30, 53, 0.14);
+    --glow-b: rgba(239, 65, 82, 0.1);
+
+    --ring-crimson: 0 0 0 3px rgba(200, 30, 53, 0.35);
+    --ring-ash: 0 0 0 3px rgba(74, 82, 94, 0.38);
+    --shadow-card: 0 20px 50px rgba(70, 20, 28, 0.14);
+}
+
+/* No-JS / pre-choice fallback: honour the OS until the user picks a side. */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+        color-scheme: light;
+
+        --bg-base: #fdf8f8;
+        --bg-deep: #ffffff;
+        --surface: #fffbfb;
+        --surface-raised: #ffffff;
+        --border: #e7d3d6;
+        --border-strong: #c99aa2;
+
+        --text: #1c1315;
+        --text-muted: #6d585c;
+
+        --crimson: #c81e35;
+        --crimson-strong: #8c0f22;
+        --crimson-bright: #ef4152;
+        --crimson-wash: #fdeaec;
+
+        --ash: #4a525e;
+        --ash-strong: #6b7480;
+        --ash-bright: #1e242c;
+        --ash-wash: #f1f3f6;
+
+        --btn-from: #c81e35;
+        --btn-to: #a3162a;
+        --btn-fg: #ffffff;
+        --btn-border: #8c0f22;
+        --btn-glow: rgba(140, 15, 34, 0.28);
+
+        --glow-a: rgba(200, 30, 53, 0.14);
+        --glow-b: rgba(239, 65, 82, 0.1);
+
+        --ring-crimson: 0 0 0 3px rgba(200, 30, 53, 0.35);
+        --ring-ash: 0 0 0 3px rgba(74, 82, 94, 0.38);
+        --shadow-card: 0 20px 50px rgba(70, 20, 28, 0.14);
+    }
 }
 
 * {
@@ -56,10 +158,10 @@ body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     color: var(--text);
     background-color: var(--bg-base);
-    /* Deep blood red top-left, live crimson bottom-right, over warm black. */
+    /* Deep crimson top-left, live crimson bottom-right, over the canvas. */
     background-image:
-        radial-gradient(60rem 40rem at 12% -10%, rgba(156, 21, 38, 0.34), transparent 60%),
-        radial-gradient(55rem 38rem at 92% 108%, rgba(239, 65, 82, 0.2), transparent 62%),
+        radial-gradient(60rem 40rem at 12% -10%, var(--glow-a), transparent 60%),
+        radial-gradient(55rem 38rem at 92% 108%, var(--glow-b), transparent 62%),
         linear-gradient(160deg, var(--surface), var(--bg-base));
     background-attachment: fixed;
 }
@@ -103,6 +205,75 @@ h1 {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--crimson);
+}
+
+/* Theme toggle ------------------------------------------------------------
+   Sits in the card's top-right gutter. Icon-only, so the accessible name
+   lives on aria-label and is kept in sync with the action, not the state. */
+
+.theme-toggle {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    z-index: 2;
+    display: inline-grid;
+    place-items: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    padding: 0;
+    color: var(--text-muted);
+    background-color: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--speed) ease, background-color var(--speed) ease,
+        border-color var(--speed) ease, box-shadow var(--speed) ease,
+        transform var(--speed) ease;
+}
+
+.theme-toggle:hover {
+    color: var(--crimson);
+    background-color: var(--bg-deep);
+    border-color: var(--border-strong);
+}
+
+.theme-toggle:focus-visible {
+    outline: none;
+    color: var(--text);
+    box-shadow: var(--ring-ash);
+}
+
+.theme-toggle:active {
+    transform: scale(0.92);
+}
+
+/* Both glyphs share one grid cell and cross-rotate on theme change. */
+.theme-toggle svg {
+    grid-area: 1 / 1;
+    width: 1.05rem;
+    height: 1.05rem;
+    transition: opacity var(--shift) ease, transform var(--shift) ease;
+}
+
+.theme-toggle .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle .icon-sun {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+
+:root[data-theme="light"] .theme-toggle .icon-moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
+
+:root[data-theme="light"] .theme-toggle .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
 }
 
 /* Form ------------------------------------------------------------------- */
@@ -149,7 +320,7 @@ select:hover {
     border-color: var(--border-strong);
 }
 
-/* Focus is ash — a cold white ring, never mistaken for the crimson alarm. */
+/* Focus is ash — a cold neutral ring, never mistaken for the crimson alarm. */
 input:focus-visible,
 select:focus-visible,
 input:focus,
@@ -159,7 +330,7 @@ select:focus {
     background-color: var(--bg-base);
 }
 
-/* Invalid entries go loud: crimson border and ring, plus a red-black fill. */
+/* Invalid entries go loud: crimson border and ring, plus a crimson fill. */
 input:invalid:not(:placeholder-shown) {
     border-color: var(--crimson);
     box-shadow: var(--ring-crimson);
@@ -173,7 +344,7 @@ select option {
 
 /* Action ----------------------------------------------------------------- */
 
-button {
+button[type="submit"] {
     margin-top: 0.5rem;
     padding: 0.75rem 1rem;
     font-size: 1rem;
@@ -181,28 +352,26 @@ button {
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    /* Black type on the crimson bar — the theme's headline pairing. White
-       would fall to ~3.4:1 on crimson; black holds 5.3:1 and up. */
-    color: var(--bg-base);
-    background-image: linear-gradient(90deg, var(--crimson), var(--crimson-bright));
-    border: 1px solid var(--crimson-strong);
+    color: var(--btn-fg);
+    background-image: linear-gradient(90deg, var(--btn-from), var(--btn-to));
+    border: 1px solid var(--btn-border);
     border-radius: 8px;
     cursor: pointer;
     transition: filter var(--speed) ease, transform var(--speed) ease,
         box-shadow var(--speed) ease;
 }
 
-button:hover {
+button[type="submit"]:hover {
     filter: brightness(1.08);
-    box-shadow: 0 10px 24px rgba(239, 65, 82, 0.32);
+    box-shadow: 0 10px 24px var(--btn-glow);
 }
 
-button:focus-visible {
+button[type="submit"]:focus-visible {
     outline: none;
     box-shadow: var(--ring-ash);
 }
 
-button:active {
+button[type="submit"]:active {
     transform: translateY(1px);
     filter: brightness(0.94);
 }
@@ -233,10 +402,14 @@ button:active {
 
 /* Failure is the only place the canvas turns red on itself. */
 .error {
-    color: var(--crimson-bright);
+    color: var(--crimson-strong);
     background-color: var(--crimson-wash);
     border-color: var(--crimson-strong);
     font-weight: 600;
+}
+
+:root:not([data-theme="light"]) .error {
+    color: var(--crimson-bright);
 }
 
 /* Non-colour cues: the two outcomes stay distinct in greyscale. */
@@ -248,7 +421,36 @@ button:active {
     content: "\26a0\00a0";
 }
 
+/* Utilities --------------------------------------------------------------- */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Preferences ------------------------------------------------------------- */
+
+/* The shift itself: only while the class is on <html>, so the first paint
+   never animates. Scoped to no-preference so it can't override the
+   reduced-motion kill switch below. */
+@media (prefers-reduced-motion: no-preference) {
+    .theme-shifting,
+    .theme-shifting *,
+    .theme-shifting *::before,
+    .theme-shifting *::after {
+        transition: background-color var(--shift) ease,
+            background-image var(--shift) ease, color var(--shift) ease,
+            border-color var(--shift) ease, box-shadow var(--shift) ease,
+            fill var(--shift) ease, stroke var(--shift) ease !important;
+    }
+}
 
 @media (prefers-reduced-motion: reduce) {
     * {

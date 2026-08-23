@@ -1,3 +1,46 @@
+/* ==========================================================================
+   Simple Calculator — "Silver & Gold" theme
+   A cool graphite canvas struck by two metals. Gold is the live metal: it
+   carries interaction and success. Silver is the cold metal: it carries
+   structure, attention and failure. Every step of the workflow —
+   input -> operation -> submit -> result / error — is silver or gold.
+   ========================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* Canvas — cool graphite, never true black, so silver reads as metal --- */
+    --bg-base: #0b0d10;
+    --bg-deep: #12151a;
+    --surface: #191d24;
+    --surface-raised: #222731;
+    --border: #39404d;
+    --border-strong: #5b6473;
+
+    /* Type ---------------------------------------------------------------- */
+    --text: #f4f6fa;
+    --text-muted: #a9b3c4;
+
+    /* Silver ramp — the cold metal: structure + failure -------------------- */
+    --silver: #c8d2e0;
+    --silver-strong: #8d9aad;
+    --silver-bright: #eef2f8;
+    --silver-wash: #171c25;
+
+    /* Gold ramp — the live metal: interaction + success -------------------- */
+    --gold: #f0c04a;
+    --gold-strong: #b8862a;
+    --gold-bright: #ffdc8a;
+    --gold-wash: #241c08;
+
+    /* Effects -------------------------------------------------------------- */
+    --ring-gold: 0 0 0 3px rgba(240, 192, 74, 0.4);
+    --ring-silver: 0 0 0 3px rgba(200, 210, 224, 0.4);
+    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.72);
+    --radius: 12px;
+    --speed: 0.18s;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,28 +48,63 @@
 body {
     margin: 0;
     min-height: 100vh;
+    padding: 2rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #222;
+    color: var(--text);
+    background-color: var(--bg-base);
+    /* Silver sheen top-left, gold sheen bottom-right, over cool graphite. */
+    background-image:
+        radial-gradient(60rem 40rem at 12% -10%, rgba(141, 154, 173, 0.28), transparent 60%),
+        radial-gradient(55rem 38rem at 92% 108%, rgba(184, 134, 42, 0.42), transparent 62%),
+        linear-gradient(160deg, var(--surface), var(--bg-base));
+    background-attachment: fixed;
 }
 
+/* Card ------------------------------------------------------------------- */
+
 .calculator {
-    background: #fff;
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
     width: 100%;
-    max-width: 360px;
+    max-width: 380px;
+    padding: 2rem 2.25rem 2.25rem;
+    background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+}
+
+/* Signature silver-to-gold rule across the top of the card. */
+.calculator::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--silver), var(--gold));
 }
 
 h1 {
-    margin: 0 0 1.25rem;
+    margin: 0 0 0.35rem;
     font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     text-align: center;
+    color: var(--silver-bright);
 }
+
+.subtitle {
+    margin: 0 0 1.35rem;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* Form ------------------------------------------------------------------- */
 
 form {
     display: flex;
@@ -37,58 +115,149 @@ form {
 label {
     display: flex;
     flex-direction: column;
-    font-size: 0.85rem;
-    color: #555;
     gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 input,
 select {
-    padding: 0.55rem 0.7rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
     font-size: 1rem;
+    font-family: inherit;
+    color: var(--text);
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color var(--speed) ease, box-shadow var(--speed) ease,
+        background-color var(--speed) ease;
 }
 
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+input:hover,
+select:hover {
+    border-color: var(--border-strong);
+}
+
+/* Focus is the live metal — warm gold against the cool canvas. */
+input:focus-visible,
+select:focus-visible,
 input:focus,
 select:focus {
-    border-color: #667eea;
+    border-color: var(--gold);
+    box-shadow: var(--ring-gold);
+    background-color: var(--gold-wash);
 }
 
+/* Invalid entries go cold: bright silver, clearly not the gold focus ring. */
+input:invalid:not(:placeholder-shown) {
+    border-color: var(--silver);
+    box-shadow: var(--ring-silver);
+}
+
+select option {
+    color: var(--text);
+    background-color: var(--surface);
+}
+
+/* Action ----------------------------------------------------------------- */
+
 button {
-    margin-top: 0.4rem;
-    padding: 0.7rem;
-    border: none;
-    border-radius: 6px;
-    background: #667eea;
-    color: #fff;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
     font-size: 1rem;
-    font-weight: 600;
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* Graphite type on the silver-to-gold bar — the theme's headline pairing.
+       White would fall to ~1.4:1 on gold; graphite holds 11:1 on both ends. */
+    color: var(--bg-base);
+    background-image: linear-gradient(90deg, var(--silver), var(--gold));
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: filter var(--speed) ease, transform var(--speed) ease,
+        box-shadow var(--speed) ease;
 }
 
 button:hover {
-    background: #5568c9;
+    filter: brightness(1.08);
+    box-shadow: 0 10px 24px rgba(240, 192, 74, 0.3);
 }
+
+button:focus-visible {
+    outline: none;
+    box-shadow: var(--ring-gold);
+}
+
+button:active {
+    transform: translateY(1px);
+    filter: brightness(0.94);
+}
+
+/* Outcome states ---------------------------------------------------------- */
 
 .result,
 .error {
-    margin-top: 1.25rem;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
+    margin-top: 1.35rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    border-left-width: 4px;
     text-align: center;
     font-size: 1rem;
 }
 
+/* Success is struck in gold. */
 .result {
-    background: #e8f5e9;
-    color: #256029;
+    color: var(--gold-bright);
+    background-color: var(--gold-wash);
+    border-color: var(--gold-strong);
 }
 
+.result strong {
+    color: var(--text);
+}
+
+/* Failure goes cold silver. The palette holds no red, so the banner leans on
+   a glyph and weight rather than hue alone to read as a failure. */
 .error {
-    background: #fdecea;
-    color: #b3261e;
+    color: var(--silver-bright);
+    background-color: var(--silver-wash);
+    border-color: var(--silver-strong);
+    font-weight: 600;
+}
+
+/* Non-colour cues: the two outcomes stay distinct in greyscale. */
+.result::before {
+    content: "\2713\00a0";
+}
+
+.error::before {
+    content: "\26a0\00a0";
+}
+
+/* Preferences ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .calculator {
+        padding: 1.5rem 1.25rem 1.75rem;
+    }
 }

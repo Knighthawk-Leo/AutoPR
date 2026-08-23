@@ -1,3 +1,47 @@
+/* ==========================================================================
+   Simple Calculator — "Dark Red & Black" theme
+   A warm black canvas cut by one hue. Crimson is the loud colour: it carries
+   the brand, the primary action and every failure. Ash is the quiet colour:
+   cold near-white for structure, focus and success. Every step of the
+   workflow — input -> operation -> submit -> result / error — is crimson or
+   ash on black.
+   ========================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* Canvas — warm black, tinted just enough that crimson sits *in* it ---- */
+    --bg-base: #0a0607;
+    --bg-deep: #120b0d;
+    --surface: #1a1013;
+    --surface-raised: #241619;
+    --border: #43272c;
+    --border-strong: #6b3a41;
+
+    /* Type ---------------------------------------------------------------- */
+    --text: #f7f2f3;
+    --text-muted: #c2adb1;
+
+    /* Crimson ramp — the loud colour: brand, action + failure -------------- */
+    --crimson: #ef4152;
+    --crimson-strong: #9c1526;
+    --crimson-bright: #ff7a86;
+    --crimson-wash: #2a0c11;
+
+    /* Ash ramp — the quiet colour: structure, focus + success -------------- */
+    --ash: #d5d9e0;
+    --ash-strong: #98a0ab;
+    --ash-bright: #f2f4f8;
+    --ash-wash: #15171b;
+
+    /* Effects -------------------------------------------------------------- */
+    --ring-crimson: 0 0 0 3px rgba(239, 65, 82, 0.45);
+    --ring-ash: 0 0 0 3px rgba(213, 217, 224, 0.4);
+    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.78);
+    --radius: 12px;
+    --speed: 0.18s;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,28 +49,63 @@
 body {
     margin: 0;
     min-height: 100vh;
+    padding: 2rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #222;
+    color: var(--text);
+    background-color: var(--bg-base);
+    /* Deep blood red top-left, live crimson bottom-right, over warm black. */
+    background-image:
+        radial-gradient(60rem 40rem at 12% -10%, rgba(156, 21, 38, 0.34), transparent 60%),
+        radial-gradient(55rem 38rem at 92% 108%, rgba(239, 65, 82, 0.2), transparent 62%),
+        linear-gradient(160deg, var(--surface), var(--bg-base));
+    background-attachment: fixed;
 }
 
+/* Card ------------------------------------------------------------------- */
+
 .calculator {
-    background: #fff;
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
     width: 100%;
-    max-width: 360px;
+    max-width: 380px;
+    padding: 2rem 2.25rem 2.25rem;
+    background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+}
+
+/* Signature deep-to-bright crimson rule across the top of the card. */
+.calculator::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--crimson-strong), var(--crimson-bright));
 }
 
 h1 {
-    margin: 0 0 1.25rem;
+    margin: 0 0 0.35rem;
     font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     text-align: center;
+    color: var(--ash-bright);
 }
+
+.subtitle {
+    margin: 0 0 1.35rem;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+}
+
+/* Form ------------------------------------------------------------------- */
 
 form {
     display: flex;
@@ -37,58 +116,149 @@ form {
 label {
     display: flex;
     flex-direction: column;
-    font-size: 0.85rem;
-    color: #555;
     gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 input,
 select {
-    padding: 0.55rem 0.7rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
     font-size: 1rem;
+    font-family: inherit;
+    color: var(--text);
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color var(--speed) ease, box-shadow var(--speed) ease,
+        background-color var(--speed) ease;
 }
 
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+input:hover,
+select:hover {
+    border-color: var(--border-strong);
+}
+
+/* Focus is ash — a cold white ring, never mistaken for the crimson alarm. */
+input:focus-visible,
+select:focus-visible,
 input:focus,
 select:focus {
-    border-color: #667eea;
+    border-color: var(--ash);
+    box-shadow: var(--ring-ash);
+    background-color: var(--bg-base);
 }
 
+/* Invalid entries go loud: crimson border and ring, plus a red-black fill. */
+input:invalid:not(:placeholder-shown) {
+    border-color: var(--crimson);
+    box-shadow: var(--ring-crimson);
+    background-color: var(--crimson-wash);
+}
+
+select option {
+    color: var(--text);
+    background-color: var(--surface);
+}
+
+/* Action ----------------------------------------------------------------- */
+
 button {
-    margin-top: 0.4rem;
-    padding: 0.7rem;
-    border: none;
-    border-radius: 6px;
-    background: #667eea;
-    color: #fff;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
     font-size: 1rem;
-    font-weight: 600;
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* Black type on the crimson bar — the theme's headline pairing. White
+       would fall to ~3.4:1 on crimson; black holds 5.3:1 and up. */
+    color: var(--bg-base);
+    background-image: linear-gradient(90deg, var(--crimson), var(--crimson-bright));
+    border: 1px solid var(--crimson-strong);
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: filter var(--speed) ease, transform var(--speed) ease,
+        box-shadow var(--speed) ease;
 }
 
 button:hover {
-    background: #5568c9;
+    filter: brightness(1.08);
+    box-shadow: 0 10px 24px rgba(239, 65, 82, 0.32);
 }
+
+button:focus-visible {
+    outline: none;
+    box-shadow: var(--ring-ash);
+}
+
+button:active {
+    transform: translateY(1px);
+    filter: brightness(0.94);
+}
+
+/* Outcome states ---------------------------------------------------------- */
 
 .result,
 .error {
-    margin-top: 1.25rem;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
+    margin-top: 1.35rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    border-left-width: 4px;
     text-align: center;
     font-size: 1rem;
 }
 
+/* Success stays quiet: cold ash on a neutral wash. */
 .result {
-    background: #e8f5e9;
-    color: #256029;
+    color: var(--ash-bright);
+    background-color: var(--ash-wash);
+    border-color: var(--ash-strong);
 }
 
+.result strong {
+    color: var(--text);
+}
+
+/* Failure is the only place the canvas turns red on itself. */
 .error {
-    background: #fdecea;
-    color: #b3261e;
+    color: var(--crimson-bright);
+    background-color: var(--crimson-wash);
+    border-color: var(--crimson-strong);
+    font-weight: 600;
+}
+
+/* Non-colour cues: the two outcomes stay distinct in greyscale. */
+.result::before {
+    content: "\2713\00a0";
+}
+
+.error::before {
+    content: "\26a0\00a0";
+}
+
+/* Preferences ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .calculator {
+        padding: 1.5rem 1.25rem 1.75rem;
+    }
 }

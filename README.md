@@ -20,38 +20,43 @@ Open http://127.0.0.1:8000 in your browser.
 ## Theme
 
 The whole workflow — form, focus, submit, result and error — is rendered in a
-**Silver & Gold** theme. Colours are defined once as custom properties in
+**Dark Red & Black** theme. Colours are defined once as custom properties in
 `:root` (`static/style.css`):
 
 | Role | Tokens |
 | --- | --- |
-| Canvas | `--bg-base` (`#0b0d10`), `--bg-deep`, `--surface`, `--surface-raised` |
-| Silver ramp | `--silver`, `--silver-strong`, `--silver-bright`, `--silver-wash` |
-| Gold ramp | `--gold`, `--gold-strong`, `--gold-bright`, `--gold-wash` |
+| Canvas | `--bg-base` (`#0a0607`), `--bg-deep`, `--surface`, `--surface-raised` |
+| Crimson ramp | `--crimson`, `--crimson-strong`, `--crimson-bright`, `--crimson-wash` |
+| Ash ramp | `--ash`, `--ash-strong`, `--ash-bright`, `--ash-wash` |
 
-Conventions: the canvas is cool **graphite**, deliberately not true black —
-silver needs something to sit against or it stops reading as metal. From there
-the UI uses exactly two metals, split by temperature:
+Conventions: the canvas is **warm black** — near-true black, but tinted red
+just enough (`r > b` on every canvas and border token) that crimson sits *in*
+the surface rather than floating on top of it. From there the UI uses exactly
+one hue, split by volume:
 
-- **Gold** is the *live* metal: focus rings, the subtitle, the submit button's
-  warm end, and the result banner.
-- **Silver** is the *cold* metal: the heading, invalid input, and the error
-  banner.
+- **Crimson** is the *loud* colour: the subtitle, the submit button, invalid
+  input, and the error banner.
+- **Ash** is the *quiet* colour — a cold near-white: the heading, the focus
+  ring, and the result banner.
 
-The two meet in the card's top accent bar and in the submit button gradient.
+The crimson ramp meets itself in the card's top accent bar and in the submit
+button gradient, sweeping deep blood red into live crimson.
 
 Three details worth keeping if you re-tune the palette:
 
-- The submit button uses **graphite type on metal** (`color: var(--bg-base)`).
-  White on bright gold is only ~1.4:1 and fails WCAG; graphite holds 11.4:1 on
-  gold and 12.7:1 on silver, so the label survives the whole gradient.
-- **This palette contains no red.** Errors therefore cannot signal by hue the
-  way a conventional theme would, so the error banner carries two non-colour
-  cues — `font-weight: 600` and a `⚠` glyph — while the result banner carries a
-  `✓`. Both banners stay distinguishable in greyscale. If you ever need a
-  louder failure state, add a third ramp rather than tinting silver.
-- Focus (gold) and invalid (silver) are separated by temperature, not
-  brightness, so they never read as the same state.
+- The submit button uses **black type on crimson** (`color: var(--bg-base)`).
+  White on `--crimson` is only ~3.4:1 and fails WCAG; black holds 5.3:1 at the
+  dark end of the bar and 8.0:1 at the bright end, so the label survives the
+  whole gradient.
+- **Red is the failure colour, so it must not also mean "you're fine."** Focus
+  is therefore ash, not crimson: a cold white ring can never be misread as an
+  error, and invalid input answers in crimson without competing with it. For
+  the same reason success is ash rather than a second hue — the result banner
+  stays quiet and the error banner is the only place the canvas turns red on
+  itself.
+- Hue alone still isn't the signal. The error banner keeps two non-colour cues
+  — `font-weight: 600` and a `⚠` glyph — while the result banner carries a `✓`,
+  so both stay distinguishable in greyscale and for red-blind users.
 
 All text pairs clear WCAG AA; body text clears AAA.
 
@@ -63,8 +68,12 @@ pytest
 ```
 
 `tests/test_workflow.py` covers the calculator behaviour; `tests/test_theme.py`
-asserts the theme itself — a cool graphite (never true-black, never warm)
-canvas, a warm gold ramp and a cool near-neutral silver ramp, per-state colour
-usage, the non-colour outcome cues, absence of every superseded palette, and
-contrast ratios including the graphite-on-metal button label at both ends of
-the gradient.
+asserts the theme itself — the canvas, the two ramps, per-state colour usage,
+the non-colour outcome cues, absence of every superseded palette, and contrast
+ratios including the button label at both ends of the gradient.
+
+> **Note:** `tests/test_theme.py` still encodes the previous **Silver & Gold**
+> spec and has not been regenerated for Dark Red & Black. It asserts the old
+> `--silver-*` / `--gold-*` token names, a cool (`b >= r`) canvas, and the old
+> subtitle string, so it will fail against the current stylesheet until it is
+> rewritten for the new palette.

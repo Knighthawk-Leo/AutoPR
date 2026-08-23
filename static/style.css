@@ -1,42 +1,43 @@
 /* ==========================================================================
-   Simple Calculator — "Silver & Gold" theme
-   A cool graphite canvas struck by two metals. Gold is the live metal: it
-   carries interaction and success. Silver is the cold metal: it carries
-   structure, attention and failure. Every step of the workflow —
-   input -> operation -> submit -> result / error — is silver or gold.
+   Simple Calculator — "Dark Red & Black" theme
+   A warm black canvas cut by one hue. Crimson is the loud colour: it carries
+   the brand, the primary action and every failure. Ash is the quiet colour:
+   cold near-white for structure, focus and success. Every step of the
+   workflow — input -> operation -> submit -> result / error — is crimson or
+   ash on black.
    ========================================================================== */
 
 :root {
     color-scheme: dark;
 
-    /* Canvas — cool graphite, never true black, so silver reads as metal --- */
-    --bg-base: #0b0d10;
-    --bg-deep: #12151a;
-    --surface: #191d24;
-    --surface-raised: #222731;
-    --border: #39404d;
-    --border-strong: #5b6473;
+    /* Canvas — warm black, tinted just enough that crimson sits *in* it ---- */
+    --bg-base: #0a0607;
+    --bg-deep: #120b0d;
+    --surface: #1a1013;
+    --surface-raised: #241619;
+    --border: #43272c;
+    --border-strong: #6b3a41;
 
     /* Type ---------------------------------------------------------------- */
-    --text: #f4f6fa;
-    --text-muted: #a9b3c4;
+    --text: #f7f2f3;
+    --text-muted: #c2adb1;
 
-    /* Silver ramp — the cold metal: structure + failure -------------------- */
-    --silver: #c8d2e0;
-    --silver-strong: #8d9aad;
-    --silver-bright: #eef2f8;
-    --silver-wash: #171c25;
+    /* Crimson ramp — the loud colour: brand, action + failure -------------- */
+    --crimson: #ef4152;
+    --crimson-strong: #9c1526;
+    --crimson-bright: #ff7a86;
+    --crimson-wash: #2a0c11;
 
-    /* Gold ramp — the live metal: interaction + success -------------------- */
-    --gold: #f0c04a;
-    --gold-strong: #b8862a;
-    --gold-bright: #ffdc8a;
-    --gold-wash: #241c08;
+    /* Ash ramp — the quiet colour: structure, focus + success -------------- */
+    --ash: #d5d9e0;
+    --ash-strong: #98a0ab;
+    --ash-bright: #f2f4f8;
+    --ash-wash: #15171b;
 
     /* Effects -------------------------------------------------------------- */
-    --ring-gold: 0 0 0 3px rgba(240, 192, 74, 0.4);
-    --ring-silver: 0 0 0 3px rgba(200, 210, 224, 0.4);
-    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.72);
+    --ring-crimson: 0 0 0 3px rgba(239, 65, 82, 0.45);
+    --ring-ash: 0 0 0 3px rgba(213, 217, 224, 0.4);
+    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.78);
     --radius: 12px;
     --speed: 0.18s;
 }
@@ -55,10 +56,10 @@ body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     color: var(--text);
     background-color: var(--bg-base);
-    /* Silver sheen top-left, gold sheen bottom-right, over cool graphite. */
+    /* Deep blood red top-left, live crimson bottom-right, over warm black. */
     background-image:
-        radial-gradient(60rem 40rem at 12% -10%, rgba(141, 154, 173, 0.28), transparent 60%),
-        radial-gradient(55rem 38rem at 92% 108%, rgba(184, 134, 42, 0.42), transparent 62%),
+        radial-gradient(60rem 40rem at 12% -10%, rgba(156, 21, 38, 0.34), transparent 60%),
+        radial-gradient(55rem 38rem at 92% 108%, rgba(239, 65, 82, 0.2), transparent 62%),
         linear-gradient(160deg, var(--surface), var(--bg-base));
     background-attachment: fixed;
 }
@@ -77,13 +78,13 @@ body {
     box-shadow: var(--shadow-card);
 }
 
-/* Signature silver-to-gold rule across the top of the card. */
+/* Signature deep-to-bright crimson rule across the top of the card. */
 .calculator::before {
     content: "";
     position: absolute;
     inset: 0 0 auto 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--silver), var(--gold));
+    background: linear-gradient(90deg, var(--crimson-strong), var(--crimson-bright));
 }
 
 h1 {
@@ -92,7 +93,7 @@ h1 {
     font-weight: 700;
     letter-spacing: -0.01em;
     text-align: center;
-    color: var(--silver-bright);
+    color: var(--ash-bright);
 }
 
 .subtitle {
@@ -101,7 +102,7 @@ h1 {
     font-size: 0.8rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--crimson);
 }
 
 /* Form ------------------------------------------------------------------- */
@@ -148,20 +149,21 @@ select:hover {
     border-color: var(--border-strong);
 }
 
-/* Focus is the live metal — warm gold against the cool canvas. */
+/* Focus is ash — a cold white ring, never mistaken for the crimson alarm. */
 input:focus-visible,
 select:focus-visible,
 input:focus,
 select:focus {
-    border-color: var(--gold);
-    box-shadow: var(--ring-gold);
-    background-color: var(--gold-wash);
+    border-color: var(--ash);
+    box-shadow: var(--ring-ash);
+    background-color: var(--bg-base);
 }
 
-/* Invalid entries go cold: bright silver, clearly not the gold focus ring. */
+/* Invalid entries go loud: crimson border and ring, plus a red-black fill. */
 input:invalid:not(:placeholder-shown) {
-    border-color: var(--silver);
-    box-shadow: var(--ring-silver);
+    border-color: var(--crimson);
+    box-shadow: var(--ring-crimson);
+    background-color: var(--crimson-wash);
 }
 
 select option {
@@ -179,11 +181,11 @@ button {
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    /* Graphite type on the silver-to-gold bar — the theme's headline pairing.
-       White would fall to ~1.4:1 on gold; graphite holds 11:1 on both ends. */
+    /* Black type on the crimson bar — the theme's headline pairing. White
+       would fall to ~3.4:1 on crimson; black holds 5.3:1 and up. */
     color: var(--bg-base);
-    background-image: linear-gradient(90deg, var(--silver), var(--gold));
-    border: 1px solid var(--border-strong);
+    background-image: linear-gradient(90deg, var(--crimson), var(--crimson-bright));
+    border: 1px solid var(--crimson-strong);
     border-radius: 8px;
     cursor: pointer;
     transition: filter var(--speed) ease, transform var(--speed) ease,
@@ -192,12 +194,12 @@ button {
 
 button:hover {
     filter: brightness(1.08);
-    box-shadow: 0 10px 24px rgba(240, 192, 74, 0.3);
+    box-shadow: 0 10px 24px rgba(239, 65, 82, 0.32);
 }
 
 button:focus-visible {
     outline: none;
-    box-shadow: var(--ring-gold);
+    box-shadow: var(--ring-ash);
 }
 
 button:active {
@@ -218,23 +220,22 @@ button:active {
     font-size: 1rem;
 }
 
-/* Success is struck in gold. */
+/* Success stays quiet: cold ash on a neutral wash. */
 .result {
-    color: var(--gold-bright);
-    background-color: var(--gold-wash);
-    border-color: var(--gold-strong);
+    color: var(--ash-bright);
+    background-color: var(--ash-wash);
+    border-color: var(--ash-strong);
 }
 
 .result strong {
     color: var(--text);
 }
 
-/* Failure goes cold silver. The palette holds no red, so the banner leans on
-   a glyph and weight rather than hue alone to read as a failure. */
+/* Failure is the only place the canvas turns red on itself. */
 .error {
-    color: var(--silver-bright);
-    background-color: var(--silver-wash);
-    border-color: var(--silver-strong);
+    color: var(--crimson-bright);
+    background-color: var(--crimson-wash);
+    border-color: var(--crimson-strong);
     font-weight: 600;
 }
 

@@ -4,65 +4,138 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#0a0607" />
-    <title>Simple Calculator</title>
+    <meta name="theme-color" content="#0b0a12" />
+    <title>Arithmancy — Hogwarts Calculator</title>
     <script>
         /* Resolve the theme before the first paint so the page never flashes
            the wrong canvas. Kept inline and blocking on purpose — an external
-           file would arrive too late. The rest of the toggle lives in
-           /static/theme.js. */
+           file would arrive too late. The rest of the switch lives in
+           /static/theme.js.
+
+           Two attributes land on <html>:
+             data-theme-mode -> what the user chose: light | dark | system
+             data-theme      -> what that resolves to: light | dark
+           Every colour rule keys off data-theme, so "system" is simply the
+           mode that lets the OS pick the value of data-theme. */
         (function () {
-            var theme = "dark";
+            var mode = "system";
             try {
                 var stored = localStorage.getItem("calculator-theme");
-                if (stored === "light" || stored === "dark") {
-                    theme = stored;
-                } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-                    theme = "light";
+                if (stored === "light" || stored === "dark" || stored === "system") {
+                    mode = stored;
                 }
             } catch (err) {
-                /* Storage blocked — keep the dark default. */
+                /* Storage blocked — follow the device. */
             }
-            document.documentElement.setAttribute("data-theme", theme);
+
+            var theme = mode;
+            if (mode === "system") {
+                theme =
+                    window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: light)").matches
+                        ? "light"
+                        : "dark";
+            }
+
+            var root = document.documentElement;
+            root.setAttribute("data-theme-mode", mode);
+            root.setAttribute("data-theme", theme);
+
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+                meta.setAttribute("content", theme === "light" ? "#f4ead3" : "#0b0a12");
+            }
         })();
     </script>
+    <!-- Cinzel carries the carved-crest voice, EB Garamond the spellbook text.
+         Both are optional: style.css falls back to a serif stack if the
+         request never lands, so the page is never blocked on them. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+    />
     <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
     <main class="calculator">
-        <!-- Revealed by theme.js: without scripting the button cannot do
-             anything, so it stays hidden and the OS preference wins. -->
-        <button
-            type="button"
-            id="theme-toggle"
-            class="theme-toggle"
-            aria-pressed="true"
-            aria-label="Switch to light mode"
-            title="Switch to light mode"
+        <!-- Lumos / Nox / Attuned. A three-way segmented control: an explicit
+             light choice, an explicit dark choice, and "system", which hands
+             the decision back to the device. Revealed by theme.js — without
+             scripting none of the three can do anything, so the group stays
+             hidden and the OS preference wins on its own. -->
+        <div
+            id="theme-switch"
+            class="theme-switch"
+            role="radiogroup"
+            aria-label="Colour theme"
             hidden
         >
-            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="4.2" />
-                <path d="M12 2v2.2M12 19.8V22M4.22 4.22l1.56 1.56M18.22 18.22l1.56 1.56M2 12h2.2M19.8 12H22M4.22 19.78l1.56-1.56M18.22 5.78l1.56-1.56" />
-            </svg>
-        </button>
+            <span class="theme-switch__thumb" aria-hidden="true"></span>
 
-        <h1>Simple Calculator</h1>
-        <p class="subtitle">Crimson &amp; Ash</p>
+            <button
+                type="button"
+                class="theme-switch__option"
+                role="radio"
+                data-mode="light"
+                aria-checked="false"
+                tabindex="-1"
+                aria-label="Light mode"
+                title="Light mode"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4.2" />
+                    <path d="M12 2v2.2M12 19.8V22M4.22 4.22l1.56 1.56M18.22 18.22l1.56 1.56M2 12h2.2M19.8 12H22M4.22 19.78l1.56-1.56M18.22 5.78l1.56-1.56" />
+                </svg>
+            </button>
+
+            <button
+                type="button"
+                class="theme-switch__option"
+                role="radio"
+                data-mode="dark"
+                aria-checked="false"
+                tabindex="-1"
+                aria-label="Dark mode"
+                title="Dark mode"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
+
+            <button
+                type="button"
+                class="theme-switch__option"
+                role="radio"
+                data-mode="system"
+                aria-checked="false"
+                tabindex="-1"
+                aria-label="System mode — follow my device"
+                title="System mode — follow my device"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2.75" y="4" width="18.5" height="12.5" rx="2" />
+                    <path d="M8.5 20.5h7M12 16.5v4" />
+                </svg>
+            </button>
+        </div>
+
+        <h1>Arithmancy</h1>
+        <p class="subtitle">Scarlet &amp; Gold</p>
 
         <form method="post" action="/">
             <label>
-                First number
+                First numeral
                 <input type="number" step="any" name="a" value="{{ a }}" required />
             </label>
 
             <label>
-                Operation
+                Incantation
                 <select name="op">
                     <option value="add" {% if op == "add" %}selected{% endif %}>Add (+)</option>
                     <option value="sub" {% if op == "sub" %}selected{% endif %}>Subtract (-)</option>
@@ -72,15 +145,15 @@
             </label>
 
             <label>
-                Second number
+                Second numeral
                 <input type="number" step="any" name="b" value="{{ b }}" required />
             </label>
 
-            <button type="submit">Calculate</button>
+            <button type="submit">Cast the Charm</button>
         </form>
 
         {% if result is not none %}
-            <div class="result" role="status">Result: <strong>{{ result }}</strong></div>
+            <div class="result" role="status">The charm yields <strong>{{ result }}</strong></div>
         {% endif %}
         {% if error %}
             <div class="error" role="alert">{{ error }}</div>

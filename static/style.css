@@ -1,151 +1,237 @@
 /* ==========================================================================
-   Simple Calculator — "Crimson & Ash" theme
-   One hue, two canvases. Crimson is the loud colour: it carries the brand,
-   the primary action and every failure. Ash is the quiet colour: cold neutral
-   for structure, focus and success. The whole UI is driven by the semantic
-   tokens below, so flipping `data-theme` on <html> shifts every surface,
-   border, ring and gradient at once.
+   Arithmancy — "Hogwarts: Scarlet & Gold" theme
+   Two houses of colour. Gold is the bright colour: candlelight, the Snitch,
+   the crest — it carries the heading, the primary action, focus and success.
+   Scarlet is the loud colour: the Express, the Sorting Hat, a hex gone wrong
+   — it carries the brand line, invalid input and every failure. The whole UI
+   is driven by the semantic tokens below, so flipping `data-theme` on <html>
+   moves the page between two places at once.
 
-   Theme resolution:
-     :root                        -> dark (default, also the no-JS fallback)
-     :root[data-theme="light"]    -> light (explicit user choice)
-     prefers-color-scheme: light  -> light, only while no choice is stored
+   Theme resolution. Three modes, two palettes: `data-theme-mode` records
+   which of the three the user picked, `data-theme` records what that
+   resolves to, and only `data-theme` is ever consulted for colour. "System"
+   therefore costs no extra palette — it is the mode in which the device,
+   rather than the user, sets `data-theme`.
+
+     :root                        -> dark  "Midnight at Hogwarts" (default)
+     :root[data-theme="light"]    -> light "Marauder's Map"       (explicit)
+     prefers-color-scheme: light  -> light, no-JS fallback only
    ========================================================================== */
 
-/* --- Dark: warm black canvas -------------------------------------------- */
+/* --- Dark: the Great Hall after dusk -------------------------------------
+   A night-sky canvas — deep blue-violet black, never true black — so the
+   candle gold reads as flame and the scarlet reads as banner cloth. */
 
 :root {
     color-scheme: dark;
 
-    /* Canvas — warm black, tinted just enough that crimson sits *in* it */
-    --bg-base: #0a0607;
-    --bg-deep: #120b0d;
-    --surface: #1a1013;
-    --surface-raised: #241619;
-    --border: #43272c;
-    --border-strong: #6b3a41;
+    /* Canvas — the enchanted ceiling */
+    --bg-base: #0b0a12;
+    --bg-deep: #12101c;
+    --surface: #171425;
+    --surface-raised: #1f1b30;
+    --border: #3a3352;
+    --border-strong: #5f5388;
 
-    /* Type */
-    --text: #f7f2f3;
-    --text-muted: #c2adb1;
+    /* Type — warm parchment on cold sky */
+    --text: #f4efe3;
+    --text-muted: #bdb3d4;
 
-    /* Crimson ramp — the loud colour: brand, action + failure */
-    --crimson: #ef4152;
-    --crimson-strong: #9c1526;
-    --crimson-bright: #ff7a86;
-    --crimson-wash: #2a0c11;
+    /* Gold ramp — candlelight: heading, action, focus + success */
+    --gold: #e3b23c;
+    --gold-strong: #a67c10;
+    --gold-bright: #f7d774;
+    --gold-wash: #241c08;
 
-    /* Ash ramp — the quiet colour: structure, focus + success */
-    --ash: #d5d9e0;
-    --ash-strong: #98a0ab;
-    --ash-bright: #f2f4f8;
-    --ash-wash: #15171b;
+    /* Scarlet ramp — the house banner: brand, invalid + failure */
+    --scarlet: #eb5560;
+    --scarlet-strong: #8e1119;
+    --scarlet-bright: #ff8089;
+    --scarlet-wash: #2b0c10;
 
-    /* Primary action — black type on the crimson bar. White would fall to
-       ~3.4:1 on crimson; black holds 5.3:1 and up. */
-    --btn-from: var(--crimson);
-    --btn-to: var(--crimson-bright);
-    --btn-fg: #0a0607;
-    --btn-border: var(--crimson-strong);
-    --btn-glow: rgba(239, 65, 82, 0.32);
+    /* Primary action — night ink on a bar of candle gold. Parchment white
+       on --gold is only ~2.0:1; the dark ink holds 9.5:1 at the deep end of
+       the sweep and 13.3:1 at the bright end. */
+    --btn-from: var(--gold);
+    --btn-to: var(--gold-bright);
+    --btn-fg: #150f22;
+    --btn-border: var(--gold-strong);
+    --btn-glow: rgba(227, 178, 60, 0.34);
 
-    /* Ambient light behind the card */
-    --glow-a: rgba(156, 21, 38, 0.34);
-    --glow-b: rgba(239, 65, 82, 0.2);
+    /* Ambient light behind the card — banner scarlet, candle gold */
+    --glow-a: rgba(142, 17, 25, 0.42);
+    --glow-b: rgba(227, 178, 60, 0.2);
+
+    /* The enchanted ceiling itself: a scatter of fixed stars. */
+    --sky-opacity: 1;
+    --sky:
+        radial-gradient(1.5px 1.5px at 8% 14%, rgba(255, 247, 220, 0.95), transparent),
+        radial-gradient(1.2px 1.2px at 22% 47%, rgba(255, 247, 220, 0.7), transparent),
+        radial-gradient(1.7px 1.7px at 34% 9%, rgba(247, 215, 116, 0.85), transparent),
+        radial-gradient(1.1px 1.1px at 41% 74%, rgba(255, 247, 220, 0.6), transparent),
+        radial-gradient(1.4px 1.4px at 57% 28%, rgba(255, 247, 220, 0.8), transparent),
+        radial-gradient(1.2px 1.2px at 63% 88%, rgba(247, 215, 116, 0.65), transparent),
+        radial-gradient(1.8px 1.8px at 74% 18%, rgba(255, 247, 220, 0.9), transparent),
+        radial-gradient(1.1px 1.1px at 82% 59%, rgba(255, 247, 220, 0.55), transparent),
+        radial-gradient(1.5px 1.5px at 91% 33%, rgba(247, 215, 116, 0.8), transparent),
+        radial-gradient(1.2px 1.2px at 96% 79%, rgba(255, 247, 220, 0.6), transparent),
+        radial-gradient(1.3px 1.3px at 15% 82%, rgba(255, 247, 220, 0.7), transparent),
+        radial-gradient(1.6px 1.6px at 49% 55%, rgba(247, 215, 116, 0.5), transparent),
+        radial-gradient(1.1px 1.1px at 69% 68%, rgba(255, 247, 220, 0.5), transparent),
+        radial-gradient(1.4px 1.4px at 5% 62%, rgba(247, 215, 116, 0.6), transparent);
 
     /* Effects */
-    --ring-crimson: 0 0 0 3px rgba(239, 65, 82, 0.45);
-    --ring-ash: 0 0 0 3px rgba(213, 217, 224, 0.4);
-    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.78);
+    --inset-sheen: rgba(247, 215, 116, 0.1);
+    --ring-gold: 0 0 0 3px rgba(227, 178, 60, 0.5);
+    --ring-scarlet: 0 0 0 3px rgba(235, 85, 96, 0.5);
+    /* The action bar is gold, so its own ring would vanish on it. */
+    --ring-invert: 0 0 0 3px rgba(244, 239, 227, 0.72);
+    --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.8);
+
+    /* Fonts — Cinzel for the carved-crest voice, Garamond for the text of a
+       spellbook. Both degrade to a serif stack if the webfont never lands. */
+    --font-display: "Cinzel", "Trajan Pro", Georgia, "Times New Roman", serif;
+    --font-body: "EB Garamond", Georgia, "Times New Roman", serif;
+
     --radius: 12px;
     --speed: 0.18s;
     --shift: 0.32s;
+
+    /* Which of the three segments the switch's thumb sits over. Overridden
+       per mode below; the fallback matches the default mode, "system". */
+    --theme-thumb: 2;
 }
 
-/* --- Light: warm paper canvas -------------------------------------------
-   Same roles, re-pitched. Crimson darkens so it keeps 4.5:1+ as text on
-   paper, and the primary action flips to white-on-crimson. Ash becomes a
-   cool slate so "quiet" still reads as quiet against a bright ground. */
+/* The selected mode, as a segment index. Kept separate from the palette
+   blocks because the two are genuinely independent: mode "system" can be
+   showing either palette. */
+:root[data-theme-mode="light"] {
+    --theme-thumb: 0;
+}
+
+:root[data-theme-mode="dark"] {
+    --theme-thumb: 1;
+}
+
+:root[data-theme-mode="system"] {
+    --theme-thumb: 2;
+}
+
+/* --- Light: the Marauder's Map -------------------------------------------
+   Same roles, re-pitched onto aged parchment. Gold sinks to a bronze ink so
+   it still clears 4.5:1 as text, scarlet deepens to Express maroon, and the
+   action bar keeps its dark-ink-on-gold contract. */
 
 :root[data-theme="light"] {
     color-scheme: light;
 
-    --bg-base: #fdf8f8;
-    --bg-deep: #ffffff;
-    --surface: #fffbfb;
-    --surface-raised: #ffffff;
-    --border: #e7d3d6;
-    --border-strong: #c99aa2;
+    --bg-base: #f4ead3;
+    --bg-deep: #fdf8ea;
+    --surface: #fbf4e2;
+    --surface-raised: #fffdf6;
+    --border: #ddcaa4;
+    --border-strong: #b99b63;
 
-    --text: #1c1315;
-    --text-muted: #6d585c;
+    --text: #241a10;
+    --text-muted: #6b5540;
 
-    --crimson: #c81e35;
-    --crimson-strong: #8c0f22;
-    --crimson-bright: #ef4152;
-    --crimson-wash: #fdeaec;
+    --gold: #8a6410;
+    --gold-strong: #5c4208;
+    --gold-bright: #c9a227;
+    --gold-wash: #fbf1d5;
 
-    --ash: #4a525e;
-    --ash-strong: #6b7480;
-    --ash-bright: #1e242c;
-    --ash-wash: #f1f3f6;
+    --scarlet: #a31621;
+    --scarlet-strong: #740d16;
+    --scarlet-bright: #d13b45;
+    --scarlet-wash: #fbe4e2;
 
-    --btn-from: #c81e35;
-    --btn-to: #a3162a;
-    --btn-fg: #ffffff;
-    --btn-border: #8c0f22;
-    --btn-glow: rgba(140, 15, 34, 0.28);
+    --btn-from: #c9a227;
+    --btn-to: #e6c355;
+    --btn-fg: #221806;
+    --btn-border: #5c4208;
+    --btn-glow: rgba(138, 100, 16, 0.3);
 
-    --glow-a: rgba(200, 30, 53, 0.14);
-    --glow-b: rgba(239, 65, 82, 0.1);
+    --glow-a: rgba(163, 22, 33, 0.12);
+    --glow-b: rgba(201, 162, 39, 0.2);
 
-    --ring-crimson: 0 0 0 3px rgba(200, 30, 53, 0.35);
-    --ring-ash: 0 0 0 3px rgba(74, 82, 94, 0.38);
-    --shadow-card: 0 20px 50px rgba(70, 20, 28, 0.14);
+    /* Not stars but tea stains — the map has been folded and refolded. */
+    --sky-opacity: 0.55;
+    --sky:
+        radial-gradient(18rem 12rem at 14% 22%, rgba(150, 110, 55, 0.13), transparent 70%),
+        radial-gradient(14rem 16rem at 84% 16%, rgba(150, 110, 55, 0.1), transparent 70%),
+        radial-gradient(22rem 14rem at 72% 86%, rgba(120, 82, 40, 0.11), transparent 72%),
+        radial-gradient(12rem 12rem at 26% 78%, rgba(150, 110, 55, 0.1), transparent 70%);
+
+    --inset-sheen: rgba(255, 255, 255, 0.8);
+    --ring-gold: 0 0 0 3px rgba(138, 100, 16, 0.42);
+    --ring-scarlet: 0 0 0 3px rgba(163, 22, 33, 0.38);
+    --ring-invert: 0 0 0 3px rgba(36, 26, 16, 0.55);
+    --shadow-card: 0 20px 50px rgba(90, 62, 24, 0.2);
 }
 
-/* No-JS / pre-choice fallback: honour the OS until the user picks a side. */
+/* No-JS fallback: honour the OS. With scripting on, `data-theme` is always
+   set before the first paint — including in system mode, where JS resolves
+   the query itself and keeps listening — so this block only ever wins when
+   the inline snippet never ran. It is the reason the switch ships `hidden`:
+   without JS the three modes cannot be chosen, and the device should decide.
+   Must stay a byte-for-byte copy of the block above. */
 @media (prefers-color-scheme: light) {
     :root:not([data-theme]) {
         color-scheme: light;
 
-        --bg-base: #fdf8f8;
-        --bg-deep: #ffffff;
-        --surface: #fffbfb;
-        --surface-raised: #ffffff;
-        --border: #e7d3d6;
-        --border-strong: #c99aa2;
+        --bg-base: #f4ead3;
+        --bg-deep: #fdf8ea;
+        --surface: #fbf4e2;
+        --surface-raised: #fffdf6;
+        --border: #ddcaa4;
+        --border-strong: #b99b63;
 
-        --text: #1c1315;
-        --text-muted: #6d585c;
+        --text: #241a10;
+        --text-muted: #6b5540;
 
-        --crimson: #c81e35;
-        --crimson-strong: #8c0f22;
-        --crimson-bright: #ef4152;
-        --crimson-wash: #fdeaec;
+        --gold: #8a6410;
+        --gold-strong: #5c4208;
+        --gold-bright: #c9a227;
+        --gold-wash: #fbf1d5;
 
-        --ash: #4a525e;
-        --ash-strong: #6b7480;
-        --ash-bright: #1e242c;
-        --ash-wash: #f1f3f6;
+        --scarlet: #a31621;
+        --scarlet-strong: #740d16;
+        --scarlet-bright: #d13b45;
+        --scarlet-wash: #fbe4e2;
 
-        --btn-from: #c81e35;
-        --btn-to: #a3162a;
-        --btn-fg: #ffffff;
-        --btn-border: #8c0f22;
-        --btn-glow: rgba(140, 15, 34, 0.28);
+        --btn-from: #c9a227;
+        --btn-to: #e6c355;
+        --btn-fg: #221806;
+        --btn-border: #5c4208;
+        --btn-glow: rgba(138, 100, 16, 0.3);
 
-        --glow-a: rgba(200, 30, 53, 0.14);
-        --glow-b: rgba(239, 65, 82, 0.1);
+        --glow-a: rgba(163, 22, 33, 0.12);
+        --glow-b: rgba(201, 162, 39, 0.2);
 
-        --ring-crimson: 0 0 0 3px rgba(200, 30, 53, 0.35);
-        --ring-ash: 0 0 0 3px rgba(74, 82, 94, 0.38);
-        --shadow-card: 0 20px 50px rgba(70, 20, 28, 0.14);
+        --sky-opacity: 0.55;
+        --sky:
+            radial-gradient(18rem 12rem at 14% 22%, rgba(150, 110, 55, 0.13), transparent 70%),
+            radial-gradient(14rem 16rem at 84% 16%, rgba(150, 110, 55, 0.1), transparent 70%),
+            radial-gradient(22rem 14rem at 72% 86%, rgba(120, 82, 40, 0.11), transparent 72%),
+            radial-gradient(12rem 12rem at 26% 78%, rgba(150, 110, 55, 0.1), transparent 70%);
+
+        --inset-sheen: rgba(255, 255, 255, 0.8);
+        --ring-gold: 0 0 0 3px rgba(138, 100, 16, 0.42);
+        --ring-scarlet: 0 0 0 3px rgba(163, 22, 33, 0.38);
+        --ring-invert: 0 0 0 3px rgba(36, 26, 16, 0.55);
+        --shadow-card: 0 20px 50px rgba(90, 62, 24, 0.2);
     }
 }
 
 * {
     box-sizing: border-box;
+}
+
+/* `hidden` is a presentational default and loses to any `display` we set —
+   the switch below is a flex container, so it needs this to stay hidden
+   until theme.js reveals it. */
+[hidden] {
+    display: none !important;
 }
 
 body {
@@ -155,18 +241,33 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-body);
+    font-size: 1.02rem;
     color: var(--text);
     background-color: var(--bg-base);
-    /* Deep crimson top-left, live crimson bottom-right, over the canvas. */
+    /* Banner scarlet low on the left, candlelight high on the right. */
     background-image:
-        radial-gradient(60rem 40rem at 12% -10%, var(--glow-a), transparent 60%),
-        radial-gradient(55rem 38rem at 92% 108%, var(--glow-b), transparent 62%),
-        linear-gradient(160deg, var(--surface), var(--bg-base));
+        radial-gradient(58rem 40rem at 10% 108%, var(--glow-a), transparent 62%),
+        radial-gradient(52rem 36rem at 88% -8%, var(--glow-b), transparent 62%),
+        linear-gradient(165deg, var(--surface), var(--bg-base));
     background-attachment: fixed;
 }
 
-/* Card ------------------------------------------------------------------- */
+/* The enchanted ceiling / the folded map — one fixed decorative layer that
+   sits behind everything and never intercepts a click. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--sky-opacity);
+    background-image: var(--sky);
+    background-repeat: no-repeat;
+}
+
+/* Card --------------------------------------------------------------------
+   A page torn from a spellbook: raised, edged, lit along the top. */
 
 .calculator {
     position: relative;
@@ -177,103 +278,148 @@ body {
     background: linear-gradient(180deg, var(--surface-raised), var(--surface));
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-card), inset 0 1px 0 var(--inset-sheen);
 }
 
-/* Signature deep-to-bright crimson rule across the top of the card. */
+/* The house colours meet in a single rule across the top of the card. */
 .calculator::before {
     content: "";
     position: absolute;
     inset: 0 0 auto 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--crimson-strong), var(--crimson-bright));
+    background: linear-gradient(
+        90deg,
+        var(--scarlet-strong),
+        var(--scarlet),
+        var(--gold),
+        var(--gold-bright)
+    );
 }
 
 h1 {
-    margin: 0 0 0.35rem;
-    font-size: 1.5rem;
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     text-align: center;
-    color: var(--ash-bright);
+    color: var(--gold);
 }
 
 .subtitle {
     margin: 0 0 1.35rem;
+    font-family: var(--font-display);
     text-align: center;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--crimson);
+    color: var(--scarlet);
 }
 
-/* Theme toggle ------------------------------------------------------------
-   Sits in the card's top-right gutter. Icon-only, so the accessible name
-   lives on aria-label and is kept in sync with the action, not the state. */
+/* A small gilded flourish under the house line. */
+.subtitle::after {
+    content: "";
+    display: block;
+    width: 5.5rem;
+    height: 1px;
+    margin: 0.75rem auto 0;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
 
-.theme-toggle {
+/* Theme switch — Lumos / Nox / Attuned -----------------------------------
+   A three-segment control in the card's top-right, above the crest. All
+   three modes stay visible at once, which is the point: with a two-state
+   toggle you cannot tell whether "dark" was chosen or merely inherited, and
+   there is nowhere to hand the decision back to the device.
+
+   It sits in normal flow rather than absolutely, because at three segments
+   wide it would otherwise collide with the heading. Icon-only, so each
+   accessible name lives on aria-label and states what that mode *is* — a
+   radio describes itself, unlike a toggle, which described its next action.
+   Selection is drawn by a sliding gold thumb, driven purely by the
+   --theme-thumb index that `data-theme-mode` sets. */
+
+.theme-switch {
+    --cell: 2rem;
+
+    position: relative;
+    display: flex;
+    width: max-content;
+    margin: -0.35rem 0 1.05rem auto;
+    padding: 3px;
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background-color var(--speed) ease,
+        border-color var(--speed) ease;
+}
+
+/* The gold bar from the primary action, shrunk to a pill and slid into
+   place. One transform, so the movement reads as a single object rather
+   than three states blinking. */
+.theme-switch__thumb {
     position: absolute;
-    top: 0.9rem;
-    right: 0.9rem;
-    z-index: 2;
-    display: inline-grid;
+    top: 3px;
+    left: 3px;
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 999px;
+    background-image: linear-gradient(135deg, var(--btn-from), var(--btn-to));
+    border: 1px solid var(--btn-border);
+    box-shadow: 0 2px 8px var(--btn-glow);
+    transform: translateX(calc(var(--theme-thumb) * var(--cell)));
+    transition: transform var(--shift) cubic-bezier(0.34, 1.16, 0.64, 1),
+        background-image var(--speed) ease, box-shadow var(--speed) ease;
+}
+
+.theme-switch__option {
+    position: relative;
+    z-index: 1;
+    display: grid;
     place-items: center;
-    width: 2.15rem;
-    height: 2.15rem;
+    width: var(--cell);
+    height: var(--cell);
     padding: 0;
     color: var(--text-muted);
-    background-color: var(--surface-raised);
-    border: 1px solid var(--border);
+    background: none;
+    border: 0;
     border-radius: 999px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: color var(--speed) ease, background-color var(--speed) ease,
-        border-color var(--speed) ease, box-shadow var(--speed) ease,
-        transform var(--speed) ease;
+    transition: color var(--speed) ease, transform var(--speed) ease;
 }
 
-.theme-toggle:hover {
-    color: var(--crimson);
-    background-color: var(--bg-deep);
-    border-color: var(--border-strong);
-}
-
-.theme-toggle:focus-visible {
-    outline: none;
-    color: var(--text);
-    box-shadow: var(--ring-ash);
-}
-
-.theme-toggle:active {
-    transform: scale(0.92);
-}
-
-/* Both glyphs share one grid cell and cross-rotate on theme change. */
-.theme-toggle svg {
-    grid-area: 1 / 1;
+.theme-switch__option svg {
     width: 1.05rem;
     height: 1.05rem;
-    transition: opacity var(--shift) ease, transform var(--shift) ease;
 }
 
-.theme-toggle .icon-moon {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
+.theme-switch__option:hover {
+    color: var(--gold);
 }
 
-.theme-toggle .icon-sun {
-    opacity: 0;
-    transform: rotate(-90deg) scale(0.5);
+/* Selected: the glyph is sitting on the gold thumb, so it takes the same
+   dark ink the action bar uses — 9.5:1 at the deep end of that sweep. */
+.theme-switch__option[aria-checked="true"],
+.theme-switch__option[aria-checked="true"]:hover {
+    color: var(--btn-fg);
 }
 
-:root[data-theme="light"] .theme-toggle .icon-moon {
-    opacity: 0;
-    transform: rotate(90deg) scale(0.5);
+.theme-switch__option:focus-visible {
+    outline: none;
+    color: var(--text);
+    box-shadow: var(--ring-gold);
 }
 
-:root[data-theme="light"] .theme-toggle .icon-sun {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
+/* A gold ring would vanish against the thumb it is drawn on. */
+.theme-switch__option[aria-checked="true"]:focus-visible {
+    color: var(--btn-fg);
+    box-shadow: var(--ring-invert);
+}
+
+.theme-switch__option:active {
+    transform: scale(0.9);
 }
 
 /* Form ------------------------------------------------------------------- */
@@ -288,9 +434,10 @@ label {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    font-size: 0.8rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
 }
@@ -299,8 +446,8 @@ input,
 select {
     width: 100%;
     padding: 0.6rem 0.75rem;
-    font-size: 1rem;
-    font-family: inherit;
+    font-size: 1.05rem;
+    font-family: var(--font-body);
     color: var(--text);
     background-color: var(--bg-deep);
     border: 1px solid var(--border);
@@ -320,21 +467,22 @@ select:hover {
     border-color: var(--border-strong);
 }
 
-/* Focus is ash — a cold neutral ring, never mistaken for the crimson alarm. */
+/* Focus is candlelight — gold, never scarlet, so the ring can't be misread
+   as an alarm. */
 input:focus-visible,
 select:focus-visible,
 input:focus,
 select:focus {
-    border-color: var(--ash);
-    box-shadow: var(--ring-ash);
+    border-color: var(--gold);
+    box-shadow: var(--ring-gold);
     background-color: var(--bg-base);
 }
 
-/* Invalid entries go loud: crimson border and ring, plus a crimson fill. */
+/* A miscast entry answers in scarlet: border, ring and a banner-red fill. */
 input:invalid:not(:placeholder-shown) {
-    border-color: var(--crimson);
-    box-shadow: var(--ring-crimson);
-    background-color: var(--crimson-wash);
+    border-color: var(--scarlet);
+    box-shadow: var(--ring-scarlet);
+    background-color: var(--scarlet-wash);
 }
 
 select option {
@@ -346,11 +494,11 @@ select option {
 
 button[type="submit"] {
     margin-top: 0.5rem;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-family: inherit;
+    padding: 0.8rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--btn-fg);
     background-image: linear-gradient(90deg, var(--btn-from), var(--btn-to));
@@ -366,9 +514,10 @@ button[type="submit"]:hover {
     box-shadow: 0 10px 24px var(--btn-glow);
 }
 
+/* The bar is already gold, so its focus ring has to invert to be seen. */
 button[type="submit"]:focus-visible {
     outline: none;
-    box-shadow: var(--ring-ash);
+    box-shadow: var(--ring-invert);
 }
 
 button[type="submit"]:active {
@@ -386,39 +535,47 @@ button[type="submit"]:active {
     border: 1px solid transparent;
     border-left-width: 4px;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.05rem;
 }
 
-/* Success stays quiet: cold ash on a neutral wash. */
+/* The charm holds: gold, the colour of a caught Snitch. */
 .result {
-    color: var(--ash-bright);
-    background-color: var(--ash-wash);
-    border-color: var(--ash-strong);
+    color: var(--gold-bright);
+    background-color: var(--gold-wash);
+    border-color: var(--gold-strong);
+}
+
+:root[data-theme="light"] .result {
+    color: var(--gold-strong);
 }
 
 .result strong {
+    font-family: var(--font-display);
+    font-weight: 700;
     color: var(--text);
 }
 
-/* Failure is the only place the canvas turns red on itself. */
+/* The spell backfires: the only place the canvas turns red on itself. */
 .error {
-    color: var(--crimson-strong);
-    background-color: var(--crimson-wash);
-    border-color: var(--crimson-strong);
+    color: var(--scarlet-strong);
+    background-color: var(--scarlet-wash);
+    border-color: var(--scarlet-strong);
     font-weight: 600;
 }
 
 :root:not([data-theme="light"]) .error {
-    color: var(--crimson-bright);
+    color: var(--scarlet-bright);
 }
 
-/* Non-colour cues: the two outcomes stay distinct in greyscale. */
+/* Non-colour cues: a struck star for the charm that held, a bolt for the one
+   that backfired. The two stay distinct in greyscale, and the error keeps a
+   weight cue on top of its glyph. */
 .result::before {
-    content: "\2713\00a0";
+    content: "\2726\00a0";
 }
 
 .error::before {
-    content: "\26a0\00a0";
+    content: "\26a1\00a0";
 }
 
 /* Utilities --------------------------------------------------------------- */
@@ -437,10 +594,16 @@ button[type="submit"]:active {
 
 /* Preferences ------------------------------------------------------------- */
 
-/* The shift itself: only while the class is on <html>, so the first paint
-   never animates. Scoped to no-preference so it can't override the
-   reduced-motion kill switch below. */
 @media (prefers-reduced-motion: no-preference) {
+    /* Candlelight never sits perfectly still. Very slow, very shallow — it
+       should read as atmosphere, not as movement. */
+    body::before {
+        animation: candlelight 11s ease-in-out infinite alternate;
+    }
+
+    /* The shift itself: only while the class is on <html>, so the first paint
+       never animates. Scoped to no-preference so it can't override the
+       reduced-motion kill switch below. */
     .theme-shifting,
     .theme-shifting *,
     .theme-shifting *::before,
@@ -449,6 +612,25 @@ button[type="submit"]:active {
             background-image var(--shift) ease, color var(--shift) ease,
             border-color var(--shift) ease, box-shadow var(--shift) ease,
             fill var(--shift) ease, stroke var(--shift) ease !important;
+    }
+
+    /* That blanket rule replaces the whole `transition` property, which would
+       strand the thumb mid-slide on exactly the clicks that move it — a mode
+       change and a palette change are the same gesture. Hand its transform
+       back, for this one element, for the length of the shift. */
+    .theme-shifting .theme-switch__thumb {
+        transition: transform var(--shift) cubic-bezier(0.34, 1.16, 0.64, 1),
+            background-image var(--shift) ease, box-shadow var(--shift) ease,
+            border-color var(--shift) ease !important;
+    }
+}
+
+@keyframes candlelight {
+    from {
+        opacity: calc(var(--sky-opacity) * 0.72);
+    }
+    to {
+        opacity: var(--sky-opacity);
     }
 }
 

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07060a" />
     <title>Simple Calculator</title>
     <link rel="stylesheet" href="/static/style.css" />
 </head>
@@ -15,21 +17,26 @@
             </label>
 
             <label>
-                Operation
-                <select name="op">
-                    <option value="add" {% if op == "add" %}selected{% endif %}>Add (+)</option>
-                    <option value="sub" {% if op == "sub" %}selected{% endif %}>Subtract (-)</option>
-                    <option value="mul" {% if op == "mul" %}selected{% endif %}>Multiply (×)</option>
-                    <option value="div" {% if op == "div" %}selected{% endif %}>Divide (÷)</option>
-                </select>
+                Second number <span class="hint">— not used by n!</span>
+                <input type="number" step="any" name="b" value="{{ b }}" />
             </label>
 
-            <label>
-                Second number
-                <input type="number" step="any" name="b" value="{{ b }}" required />
-            </label>
+            <div class="ops">
+                <button type="submit" name="op" value="add" title="Add">+</button>
+                <button type="submit" name="op" value="sub" title="Subtract">−</button>
+                <button type="submit" name="op" value="mul" title="Multiply">×</button>
+                <button type="submit" name="op" value="div" title="Divide">÷</button>
+                <button type="submit" name="op" value="fact" class="op-extra"
+                        title="Factorial of the first number">n!</button>
+                <button type="submit" name="op" value="pct" class="op-extra"
+                        title="Percentage: the first number percent of the second (a% of b)">%</button>
+            </div>
 
-            <button type="submit">Calculate</button>
+            <p class="hint hint-legend">
+                <strong>n!</strong> factorial of the first number
+                &nbsp;·&nbsp;
+                <strong>%</strong> a% of b
+            </p>
         </form>
 
         {% if result is not none %}
